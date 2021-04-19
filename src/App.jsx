@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 import Footer from "./Components/Footer.jsx";
+import List from "./Components/List.jsx";
+import Input from "./Components/Input.jsx";
 
 function App() {
     const [task,
         setTask] = useState("");
     const [lists,
         setLists] = useState([]);
-    const listItems = lists.map((list) => <li key={list}>{list}</li>);
     function handleChange(event) {
         const {value} = event.target;
         setTask(value);
@@ -18,6 +19,16 @@ function App() {
             ]);
         });
     }
+
+    function deleteItem(id){
+        setLists((prevValue)=>{
+            return(prevValue.filter((item,index) =>{
+                return index !=id;
+            }))
+        })
+    }
+
+
     console.log(lists);
     return (
         <div>
@@ -25,20 +36,13 @@ function App() {
             <h1 className="heading">
                 To-Do List
             </h1>
-            <div className="addtask">
-                <input
-                    name="task"
-                    type="text"
-                    onChange={handleChange}
-                    value={task}
-                    placeholder="Input Task"/>
-                <button onClick={handleClick}>Add</button>
-            </div>
+            <Input text={task} onChange={handleChange} onClick={handleClick} />
+
             <div className="list">
-                <ul>
-                    {listItems}
-                </ul>
-            </div>
+            <ul>
+  {lists.map((items,index) => <List key= {index} id= {index} text={items} onChecked={deleteItem} /> )}
+        </ul>
+        </div>
         </div>
         <Footer />
         </div>
@@ -46,3 +50,4 @@ function App() {
 }
 
 export default App;
+
